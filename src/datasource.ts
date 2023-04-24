@@ -7,7 +7,7 @@ import { BookFileEntity } from './book-storage/entity/book-file.entity';
 import {
   SeedGenreRecords1682354142527,
   SeedUserAdminRecord1682354412513,
-} from './migrations/index';
+} from './utils/migrations/index';
 
 export const dataSource = new DataSource({
   type: 'postgres',

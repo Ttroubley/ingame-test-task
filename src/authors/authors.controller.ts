@@ -12,8 +12,9 @@ import { AuthorsService } from './authors.service';
 import { AuthorDto } from './dto/author.dto';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles-guard/roles.decorator';
+import { Roles } from 'src/auth/roles-guard/roles.decorator';
 import { Role } from 'src/auth/roles-guard/roles.enum';
+import { RolesGuard } from 'src/auth/roles-guard/role.guard';
 
 @Controller('api/authors')
 export class AuthorsController {
@@ -24,15 +25,15 @@ export class AuthorsController {
     return await this.authorService.getAllAuthors();
   }
 
-  @RolesGuard(Role.Admin)
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   async getOne(@Param('id') id: string): Promise<AuthorDto> {
     return await this.authorService.getAuthor(id);
   }
 
-  @RolesGuard(Role.Admin)
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   async createAuthor(
     @Body() createAuthorDto: CreateAuthorDto,
@@ -40,15 +41,15 @@ export class AuthorsController {
     return await this.authorService.createAuthor(createAuthorDto);
   }
 
-  @RolesGuard(Role.Admin)
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Put(':id')
   async updateAuthor(@Param('id') id: string, authorDto: AuthorDto) {
     return await this.authorService.updateAuthor(id, authorDto);
   }
 
-  @RolesGuard(Role.Admin)
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async deleteAuthor(@Param('id') id: string): Promise<AuthorDto> {
     return await this.authorService.deleteAuthor(id);

@@ -4,7 +4,7 @@ import { AuthorEntity } from './entity/author.entity';
 import { Repository } from 'typeorm';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { AuthorDto } from './dto/author.dto';
-import { toAuthorDto } from 'src/utils';
+import { toAuthorDto } from 'src/utils/utils';
 
 @Injectable()
 export class AuthorsService {

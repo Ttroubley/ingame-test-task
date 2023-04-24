@@ -3,7 +3,7 @@ import { GenreDto } from './dto/genre.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenreEntity } from './entity/genre.entity';
 import { Repository } from 'typeorm';
-import { toGenreDto } from 'src/utils';
+import { toGenreDto } from 'src/utils/utils';
 import { CreateGenreDto } from './dto/create-genre.dto';
 
 @Injectable()
@@ -30,10 +30,14 @@ export class GenresService {
 
   async addGenre(createGenreDto: CreateGenreDto): Promise<GenreDto> {
     const { name } = createGenreDto;
-    const genre: GenreEntity = this.genreRepository.create({
+    const genre = await this.genreRepository.findOne({ where: { name } });
+    if (genre) {
+      throw new HttpException('Genre already exists', HttpStatus.BAD_REQUEST);
+    }
+    const newGenre: GenreEntity = this.genreRepository.create({
       name,
     });
-    await this.genreRepository.save(genre);
+    await this.genreRepository.save(newGenre);
     return toGenreDto(genre);
   }
 }

@@ -1,11 +1,11 @@
-import { AuthorDto } from './authors/dto/author.dto';
-import { AuthorEntity } from './authors/entity/author.entity';
-import { BookDto } from './books/dto/book.dto';
-import { BookEntity } from './books/entity/book.entity';
-import { GenreDto } from './genres/dto/genre.dto';
-import { GenreEntity } from './genres/entity/genre.entity';
-import { UserDto } from './users/dto/user.dto';
-import { UserEntity } from './users/entity/user.entity';
+import { AuthorDto } from '../authors/dto/author.dto';
+import { AuthorEntity } from '../authors/entity/author.entity';
+import { BookDto } from '../books/dto/book.dto';
+import { BookEntity } from '../books/entity/book.entity';
+import { GenreDto } from '../genres/dto/genre.dto';
+import { GenreEntity } from '../genres/entity/genre.entity';
+import { UserDto } from '../users/dto/user.dto';
+import { UserEntity } from '../users/entity/user.entity';
 import * as bcrypt from 'bcrypt';
 
 export const toBookDto = (data: BookEntity): BookDto => {

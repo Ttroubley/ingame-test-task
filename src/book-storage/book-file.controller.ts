@@ -10,22 +10,23 @@ import {
 import { BookFileService } from './book-file.service';
 import { FileUploadInterceptor } from './file-upload.interseptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from '../auth/roles-guard/roles.decorator';
+import { Roles } from '../auth/roles-guard/roles.decorator';
 import { Role } from 'src/auth/roles-guard/roles.enum';
+import { RolesGuard } from 'src/auth/roles-guard/role.guard';
 
 @Controller('bookfile')
 export class BookFileController {
   constructor(private readonly bookFileService: BookFileService) {}
 
-  @RolesGuard(Role.Admin)
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   async downloadBookFile(@Param('id') id: string) {
     return await this.bookFileService.downloadBookFile(id);
   }
 
-  @RolesGuard(Role.Admin)
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post(':id')
   @UseInterceptors(FileUploadInterceptor)
   async uploadBookFile(@Param('id') id: string, @UploadedFile() file: Buffer) {

@@ -3,9 +3,9 @@ import { GenresService } from './genres.service';
 import { GenreDto } from './dto/genre.dto';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles-guard/roles.decorator';
 import { Role } from 'src/auth/roles-guard/roles.enum';
-
+import { RolesGuard } from '../auth/roles-guard/role.guard';
+import { Roles } from 'src/auth/roles-guard/roles.decorator';
 @Controller('api/genres')
 export class GenresController {
   constructor(private readonly genresService: GenresService) {}
@@ -15,8 +15,8 @@ export class GenresController {
     return await this.genresService.getAllGenres();
   }
 
-  @RolesGuard(Role.Admin)
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   async addGenre(@Body() createGenreDto: CreateGenreDto) {
     return await this.genresService.addGenre(createGenreDto);
