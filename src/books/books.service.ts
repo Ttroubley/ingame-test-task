@@ -1,11 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  StreamableFile,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookEntity } from './entity/book.entity';
 import { BookDto } from './dto/book.dto';
-import { toAuthorDto, toBookDto, toGenreDto } from 'src/utils';
+import { toBookDto } from 'src/utils';
 import { CreateBookDto } from './dto/create-book.dto';
-import { GenresService } from 'src/genres/genres.service';
 import { AuthorDto } from 'src/authors/dto/author.dto';
 import { AuthorsService } from 'src/authors/authors.service';
 
@@ -14,7 +18,6 @@ export class BooksService {
   constructor(
     @InjectRepository(BookEntity)
     private readonly bookRepository: Repository<BookEntity>,
-    private readonly genreService: GenresService,
     private readonly authorService: AuthorsService,
   ) {}
 
@@ -23,7 +26,7 @@ export class BooksService {
     return books.map((book) => toBookDto(book));
   }
 
-  async getBook(id: number): Promise<BookDto> {
+  async getBook(id: string): Promise<BookDto> {
     const book: BookEntity = await this.bookRepository.findOne({
       where: { id },
     });
@@ -53,15 +56,30 @@ export class BooksService {
         authors: authorsDto,
       };
     }
+    await this.bookRepository.save(book);
     return toBookDto(book);
   }
 
-  // async update(bookDto: BookDto): Promise<void> {
-  //   const { id, name, genre, publisher, year, authors } = bookDto;
-  //   await this.bookRepository.update(id, book);
-  // }
+  async updateBook(id: string, bookDto: BookDto): Promise<void> {
+    const { name, genre, publisher, year, authors } = bookDto;
+    let book: BookEntity = await this.bookRepository.findOne({ where: { id } });
 
-  async deleteBook(id: number): Promise<void> {
+    if (!book) {
+      throw new HttpException('Book doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+
+    book = {
+      id,
+      name,
+      genre,
+      publisher,
+      year,
+      authors,
+    };
+    await this.bookRepository.save(book);
+  }
+
+  async deleteBook(id: string): Promise<void> {
     const book: BookEntity = await this.bookRepository.findOne({
       where: { id },
     });

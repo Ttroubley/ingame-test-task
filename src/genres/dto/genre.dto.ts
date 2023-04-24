@@ -1,10 +1,12 @@
 import { IsNotEmpty } from 'class-validator';
-import { AuthorEntity } from 'src/authors/entity/author.entity';
+import { BookDto } from 'src/books/dto/book.dto';
 
 export class GenreDto {
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsNotEmpty()
   name: string;
+
+  books?: BookDto[];
 }

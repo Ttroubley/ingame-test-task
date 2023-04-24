@@ -4,7 +4,7 @@ import { GenreDto } from 'src/genres/dto/genre.dto';
 
 export class BookDto {
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsNotEmpty()
   name: string;
@@ -13,7 +13,9 @@ export class BookDto {
 
   genre: GenreDto;
 
-  authors: AuthorDto[];
+  authors?: AuthorDto[];
 
-  publisher: string;
+  publisher?: string;
+
+  bookFileId?: string;
 }

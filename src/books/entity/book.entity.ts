@@ -8,25 +8,27 @@ import {
 } from 'typeorm';
 import { AuthorEntity } from '../../authors/entity/author.entity';
 import { GenreEntity } from '../../genres/entity/genre.entity';
-
 @Entity('book')
 export class BookEntity {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column('text')
+  @Column({ type: 'varchar' })
   name: string;
 
-  @Column()
-  year: number;
+  @Column({ type: 'int', nullable: true })
+  year?: number;
 
   @ManyToOne(() => GenreEntity, (genre) => genre.books)
-  genre: GenreEntity;
+  genre?: GenreEntity;
 
   @ManyToMany(() => AuthorEntity)
   @JoinTable()
-  authors: AuthorEntity[];
+  authors?: AuthorEntity[];
 
-  @Column()
-  publisher: string;
+  @Column({ type: 'varchar', nullable: true })
+  publisher?: string;
+
+  @Column({ nullable: true })
+  bookFileId?: string;
 }

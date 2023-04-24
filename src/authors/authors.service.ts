@@ -28,7 +28,7 @@ export class AuthorsService {
     return authors.map((author) => toAuthorDto(author));
   }
 
-  async getAuthor(id: number) {
+  async getAuthor(id: string) {
     const author: AuthorEntity = await this.authorRepository.findOne({
       where: { id },
     });
@@ -37,8 +37,24 @@ export class AuthorsService {
     }
     return toAuthorDto(author);
   }
+  async updateAuthor(id: string, authorDto: AuthorDto): Promise<AuthorDto> {
+    const { fullName, birthdate } = authorDto;
+    let author: AuthorEntity = await this.authorRepository.findOne({
+      where: { id },
+    });
+    if (!author) {
+      throw new HttpException('Author doesnt exists', HttpStatus.BAD_REQUEST);
+    }
+    author = {
+      id,
+      fullName,
+      birthdate,
+    };
+    await this.authorRepository.save(author);
+    return toAuthorDto(author);
+  }
 
-  async deleteAuthor(id: number) {
+  async deleteAuthor(id: string) {
     const author: AuthorEntity = await this.authorRepository.findOne({
       where: { id },
     });

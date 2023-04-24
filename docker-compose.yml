@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_DB: inGameTestDb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+    networks:
+      - pg
+
+  pgweb:
+    image: 'sosedoff/pgweb'
+    restart: always
+    ports:
+      - '8081:8081'
+    environment:
+      - PGWEB_DATABASE_URL=postgres://user:password@postgres:5432/inGameTestDb?sslmode=disable
+    networks:
+      - pg
+
+networks:
+  pg:
+    driver: bridge

@@ -3,12 +3,12 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity('genre')
 export class GenreEntity {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name: string;
 
   @OneToMany(() => BookEntity, (book) => book.genre)
-  books: BookEntity[];
+  books?: BookEntity[];
 }

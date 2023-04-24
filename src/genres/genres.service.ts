@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GenreEntity } from './entity/genre.entity';
 import { Repository } from 'typeorm';
 import { toGenreDto } from 'src/utils';
+import { CreateGenreDto } from './dto/create-genre.dto';
 
 @Injectable()
 export class GenresService {
@@ -11,18 +12,28 @@ export class GenresService {
     @InjectRepository(GenreEntity)
     private readonly genreRepository: Repository<GenreEntity>,
   ) {}
+
   async getAllGenres(): Promise<GenreDto[]> {
     const genres = await this.genreRepository.find();
     return genres.map((genre) => toGenreDto(genre));
   }
 
-  async getGenre(id: number): Promise<GenreDto> {
+  async getGenre(id: string): Promise<GenreDto> {
     const genre: GenreEntity = await this.genreRepository.findOne({
       where: { id },
     });
     if (!genre) {
       throw new HttpException('Genre not found', HttpStatus.BAD_REQUEST);
     }
+    return toGenreDto(genre);
+  }
+
+  async addGenre(createGenreDto: CreateGenreDto): Promise<GenreDto> {
+    const { name } = createGenreDto;
+    const genre: GenreEntity = this.genreRepository.create({
+      name,
+    });
+    await this.genreRepository.save(genre);
     return toGenreDto(genre);
   }
 }
