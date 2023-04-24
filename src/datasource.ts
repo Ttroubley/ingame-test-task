@@ -11,7 +11,7 @@ import {
 
 export const dataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',
+  host: 'postgres',
   port: 5432,
   username: 'user',
   password: 'password',
