@@ -2,12 +2,10 @@ FROM node:alpine
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-COPY tsconfig*.json ./
-RUN npm install
+COPY . .
+
+RUN npm ci
 
 RUN npm run build
-
-COPY . .
 
 CMD [ "node", "dist/main.js" ]
